@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work — Jack Mislinski</title>
+    <meta name="description" content="Research, companies, and code by Jack Mislinski — at the intersection of exercise physiology and machine learning.">
+    <link rel="icon" type="image/jpeg" href="images/profile.jpg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="site-title">Jack Mislinski</a>
+            <nav class="site-nav" aria-label="Primary">
+                <a href="/work.html">Work</a>
+                <a href="/funspan.html">Funspan</a>
+                <a href="https://jackmislinski.substack.com/">Writing</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <p class="page-header-eyebrow">Work</p>
+                <h1>Research, companies, and code.</h1>
+                <p class="lede">
+                    MSc Applied Physiology, University of Colorado Colorado Springs. Research focused on mitochondrial bioenergetics, redox biology, and metabolic measurement. The thread through everything else — companies, code, writing — is that same axis: how the body produces, allocates, and protects energy, and what falls out of taking that seriously.
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <p class="section-label">Research</p>
+                <div class="item-list">
+                    <article class="item">
+                        <p class="item-meta">In preparation · Mislinski, Subudhi, Jacobs · Target: <em>Redox Biology</em></p>
+                        <h3 class="item-title">Mitochondrial oxidative capacity outpaces redox buffering during endurance training across rat tissues: sex-dimorphic scaling revealed by a thermodynamic framework analysis of MoTrPAC</h3>
+                        <p class="item-desc">
+                            A secondary analysis of the MoTrPAC rat endurance training dataset (<em>Nature</em> 2024; <em>Cell Metabolism</em> 2024) through the Vandiver–Neufer thermodynamic framework for mitochondrial redox biology. An 85-gene set organized by thermodynamic function (ETS, ATP synthase, NNT, GSH, TRX, SOD), queried across 42,770 observations spanning 19 tissues, 5 omic layers, 4 training time points, and both sexes.
+                        </p>
+                        <p class="item-desc">
+                            <strong>Headline result.</strong> After 8 weeks of endurance training, transcriptional investment in redox buffering scales sub-linearly with ETS expansion in both sexes. Males (conservative estimate, excluding two influential tissues): β = 0.55 [0.28, 0.82], R² = 0.57, p = 0.0017. Females (conservative): β = 0.31 [0.10, 0.52], R² = 0.42, p = 2.8 × 10⁻⁶. The pattern <strong>replicates at the protein level</strong> in an independent omic layer (males β = 0.43, p(β&lt;1) = 7.6 × 10⁻⁴; females β = 0.22, p(β&lt;1) = 4.2 × 10⁻⁵). Sex-dimorphic quality-control architecture: males coordinate ETS with mtUPR and mitophagy (damage-sensing); females through AMPK (energy-sensing).
+                        </p>
+                        <div class="item-links">
+                            <a href="/papers/motrpac-redox.pdf" target="_blank" rel="noopener">Read draft (PDF)</a>
+                            <span>·</span>
+                            <a href="https://github.com/jackmis610/motrpac-redox">Analysis repo</a>
+                        </div>
+                    </article>
+
+                    <article class="item">
+                        <p class="item-meta">In preparation · Mislinski &amp; Subudhi</p>
+                        <h3 class="item-title">Validation of the MGC Diagnostics Meridian Metabolic Cart against the Douglas bag method during maximal-intensity treadmill exercise</h3>
+                        <p class="item-desc">
+                            First published independent validation of the MGC Meridian — a recently-introduced breath-by-breath cart marketed for VO₂max measurement — and the first MGC-vs-Douglas comparison during maximal treadmill running. Nine healthy adult athletes contributed 17 paired bag–cart observations at near-maximal and maximal intensities; agreement assessed via Bland–Altman across VE, VO₂, VCO₂, and RER.
+                        </p>
+                        <p class="item-desc">
+                            <strong>Headline.</strong> The MGC overestimates VO₂ by a mean of 207 mL·min⁻¹ (6.5%, p &lt; 0.001) and underestimates RER by 0.04 RER units (4.6%, p &lt; 0.001) at maximal effort. VE underestimated by 1.9% (p = 0.010); VCO₂ bias not significant. The VO₂ overestimate is consistent in direction across every paired observation — a non-trivial bias for any lab using the Meridian for VO₂max-based clinical or athletic decisions.
+                        </p>
+                        <div class="item-links">
+                            <a href="/papers/mgc-meridian-validation.pdf" target="_blank" rel="noopener">Read draft (PDF)</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <p class="section-label">Building</p>
+                <div class="item-list">
+                    <article class="item">
+                        <p class="item-meta">Company · CPET interpretation software</p>
+                        <h3 class="item-title"><a href="https://aevox.health">Aevox</a></h3>
+                        <p class="item-desc">
+                            <em>"Read every breath your cart throws away."</em>
+                        </p>
+                        <p class="item-desc">
+                            A maximal CPET produces tens of thousands of data points; the standard cart report collapses them to a single number. Aevox reinterprets the raw breath-by-breath data into a defensible clinical report: a four-detector threshold ensemble with confidence scoring, substrate-oxidation curves, per-athlete glycogen pool modeling and carbohydrate prescriptions, running-economy quantification (mL O₂ / kg / km), six physiology-anchored HR zones, and a coach-facing summary.
+                        </p>
+                        <p class="item-desc">
+                            Integrates with COSMED, ParvoMedics, Vyaire, MGC, Cortex, and Geratherm. In pilot at Hybl Performance Center (Colorado Springs) via CommonSpirit Health and EXOS. Originated as the analysis pipeline for my MSc research, validated against Douglas-bag reference standards.
+                        </p>
+                        <div class="item-links">
+                            <a href="https://aevox.health">aevox.health</a>
+                        </div>
+                    </article>
+
+                    <article class="item">
+                        <p class="item-meta">Product · Personalized endurance fuel</p>
+                        <h3 class="item-title">Fyool</h3>
+                        <p class="item-desc">
+                            A dual-source carbohydrate and electrolyte mix custom-formulated from your CPET data — burn rate, substrate ratio, and electrolyte losses — instead of from a population-average marketing guess. Six ingredients, no fillers, your numbers on the label.
+                        </p>
+                    </article>
+
+                    <article class="item">
+                        <p class="item-meta">Product · Endurance physiology dashboard</p>
+                        <h3 class="item-title"><a href="https://funspan.health">Funspan</a></h3>
+                        <p class="item-desc">
+                            Coach-first longitudinal physiology dashboard for endurance athletes. Three pillars — metabolic efficiency, economy, fatigue resistance — tracked over time with every number grounded in the athlete's own data. Typed event store, derived-metric layer, narrative scorecards. Ingests Strava, Whoop, Garmin, and lab CPET; built on a single source-of-truth schema across Pretext, the Whoop loader, and the CPET pipeline.
+                        </p>
+                        <div class="item-links">
+                            <a href="https://funspan.health">funspan.health</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="code">
+            <div class="container">
+                <p class="section-label">Code</p>
+                <div class="item-list">
+                    <article class="item" id="bioml">
+                        <p class="item-meta">In development · Python</p>
+                        <h3 class="item-title">bioML</h3>
+                        <p class="item-desc">
+                            Predicting metabolic substrate use — VO₂, RER, fat and carbohydrate oxidation rates — from consumer wearable signals. Physiology-grounded: the synthetic-data scaffold encodes published priors (Frayn 1983 stoichiometry, Coyle 1986, Achten/Maunder MFO norms, Iannetta threshold cohort, Tanaka HRmax) and matches independent sensor-validation studies for Apple Watch, Garmin, Whoop, Dexcom, and Favero. Phase 2 swaps the synthetic scaffold for real CPET + wearable data via the Aevox partnership.
+                        </p>
+                    </article>
+
+                    <article class="item">
+                        <p class="item-meta">Public · HTML/JS</p>
+                        <h3 class="item-title"><a href="https://github.com/jackmis610/longevity-biomarker-heatmap">Longevity Biomarker Heat Map</a></h3>
+                        <p class="item-desc">
+                            A rigorous, citation-backed map of how testable biomarkers predict aging-related outcomes. 135 biomarkers across 14 domains, 519 evidence cells linking them to all-cause mortality, CVD, cancer, dementia, and frailty — every quantified cell checked against primary sources (259 verified, 97 approximate, 0 unverified). Hazard ratios standardized to HR-per-+1-SD so markers in different units are directly comparable. Includes a personal scoring dashboard that places your own labs on the population SD scale.
+                        </p>
+                        <div class="item-links">
+                            <a href="https://github.com/jackmis610/longevity-biomarker-heatmap">GitHub</a>
+                        </div>
+                    </article>
+
+                    <article class="item">
+                        <p class="item-meta">Public · Python</p>
+                        <h3 class="item-title"><a href="https://github.com/jackmis610/podex">PodeX</a></h3>
+                        <p class="item-desc">
+                            Local-first AI podcast that turns your X timeline into a personalized ~10-minute daily audio briefing — broad scan, deep dive, speculative moonshot. Real-browser scraping via Playwright, Claude for script generation, ElevenLabs for synthesis, served as a local RSS feed.
+                        </p>
+                        <div class="item-links">
+                            <a href="https://github.com/jackmis610/podex">GitHub</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <p class="quiet-note">
+                    I also work privately with a small number of athletes and patients on metabolic health and personalized physiology coaching — by referral only.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="social-links" aria-label="Social media">
+                <a href="https://x.com/JackMislinski" aria-label="X (Twitter)" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="http://instagram.com/jackmislinski" aria-label="Instagram" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.336 3.608 1.311.975.975 1.249 2.242 1.311 3.608.058 1.266.069 1.646.069 4.85 0 3.205-.012 3.584-.07 4.85-.062 1.366-.336 2.633-1.311 3.608-.975.975-2.242 1.249-3.608 1.311-1.266.058-1.645.069-4.85.069-3.204 0-3.584-.012-4.849-.07-1.366-.062-2.633-.336-3.608-1.311-.975-.975-1.249-2.242-1.311-3.608C2.175 15.747 2.163 15.367 2.163 12s.012-3.584.07-4.85c.062-1.366.336-2.633 1.311-3.608.975-.975 2.242-1.249 3.608-1.311 1.265-.058 1.645-.069 4.849-.069zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.354.673 2.013 2.013 0.673 3.354.157 5.197.072 7.052.014 8.332 0 8.741 0 12s.014 3.668.072 4.948c.085 1.855.601 3.698 1.941 5.039 1.341 1.34 3.184 1.856 5.039 1.941C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.855-.085 3.698-.601 5.039-1.941 1.34-1.341 1.856-3.184 1.941-5.039.058-1.28.072-1.689.072-4.948s-.014-3.668-.072-4.948c-.085-1.855-.601-3.698-1.941-5.039C20.646.673 18.803.157 16.948.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                </a>
+                <a href="https://open.spotify.com/show/3R8xRTa1zcQaKg8lb9fT6c" aria-label="Spotify" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                </a>
+            </div>
+            <p class="copyright">&copy; <span id="year">2026</span> Jack Mislinski</p>
+        </div>
+    </footer>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
