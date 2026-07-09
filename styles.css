@@ -298,6 +298,7 @@ main { flex: 1; }
     font-size: 0.95rem;
     border-bottom: 1px solid var(--text);
 }
+.cta-link + .cta-link { margin-left: 1.5rem; }
 
 /* Coaching note (quiet) */
 .quiet-note {
