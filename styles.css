@@ -124,6 +124,20 @@ main { flex: 1; }
     color: var(--text);
     margin-bottom: 1.5rem;
 }
+.hero-featured {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+}
+.hero-featured a {
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--text-faint);
+}
+.hero-featured a:hover {
+    color: var(--text);
+    border-bottom-color: var(--text);
+}
 .hero-actions {
     display: flex;
     gap: 1.5rem;
