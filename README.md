@@ -6,22 +6,31 @@ Static personal site. Pure HTML/CSS — no build step, no framework, no JS depen
 
 ```
 jackmislinski.com/
-├── index.html         # Homepage — bio + featured work + writing CTA
-├── work.html          # Research, building, code
-├── funspan.html       # The Funspan framework / brand pitch
+├── index.html         # The site — bio, building, research, writing CTA
+├── work.html          # Redirect stub → / (old page, kept so bookmarks don't 404)
+├── funspan.html       # The Funspan framework (off-nav, linked from bio)
 ├── styles.css         # All styles
-└── images/
-    └── profile.jpg    # Profile photo
+├── CNAME              # GitHub Pages custom domain
+├── images/profile.jpg
+├── papers/            # Research PDFs
+├── biomarkers/        # Longevity Biomarker Heat Map (standalone HTML, synced from its repo)
+└── wearables/         # Wearable Validity Atlas (standalone HTML, synced from its repo)
 ```
 
-Nav: **Work · Funspan · Writing**. Writing goes straight to Substack.
+Nav: **Writing** only (goes straight to Substack). Footer: LinkedIn · X · Substack.
 
-## Content placeholders
+## Hosting
 
-Search the HTML for `[REPLACE: ...]` markers — these are spots where I left guess-text or asked for a sentence. Currently:
+Deployed via GitHub Pages from `main`. DNS: A records at Wix → GitHub Pages IPs (Wix won't allow nameserver changes). Push to `main` and it's live in ~1 min.
 
-- `index.html` / `work.html` — Aevox one-liner (best version) and the CPET validation paper description.
-- `funspan.html` — one or two sentences for each of the four pillars (Biology, Passion, Relationships, Psychology).
+## Syncing the hosted tools
+
+`biomarkers/index.html` and `wearables/index.html` are copies of the standalone builds in their source repos. To update:
+
+```bash
+curl -sL https://raw.githubusercontent.com/jackmis610/longevity-biomarker-heatmap/main/heatmap/heatmap-standalone.html -o biomarkers/index.html
+curl -sL https://raw.githubusercontent.com/jackmis610/wearable-validity-atlas/main/docs/index.html -o wearables/index.html
+```
 
 ## Local preview
 
