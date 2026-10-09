@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Aevox reads a metabolic test — Jack Mislinski</title>
+    <meta name="description" content="Architecture notes on Aevox: turning messy metabolic-cart exports into numbers a coach can act on. Deterministic code does the math, a model proposes, and physics checks and a physiologist decide.">
+    <link rel="canonical" href="https://jackmislinski.com/aevox-architecture">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="How Aevox reads a metabolic test">
+    <meta property="og:description" content="Deterministic code does the math, a model proposes, and physics checks and a physiologist decide. Architecture notes by Jack Mislinski.">
+    <meta property="og:url" content="https://jackmislinski.com/aevox-architecture">
+    <meta property="og:image" content="https://jackmislinski.com/images/profile.jpg">
+    <link rel="icon" type="image/jpeg" href="images/profile.jpg">
+    <link rel="stylesheet" href="styles.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "How Aevox reads a metabolic test",
+      "description": "Architecture notes on Aevox: ingest under physics checks, a deterministic threshold engine, a bounded model read, and a physiologist who confirms.",
+      "url": "https://jackmislinski.com/aevox-architecture",
+      "datePublished": "2026-10-09",
+      "author": { "@type": "Person", "@id": "https://jackmislinski.com/#person", "name": "Jack Mislinski", "url": "https://jackmislinski.com/" },
+      "about": [
+        { "@type": "SoftwareApplication", "name": "Aevox", "url": "https://aevox.health", "applicationCategory": "HealthApplication" },
+        "Cardiopulmonary exercise testing",
+        "LLM guardrails"
+      ]
+    }
+    </script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="site-title">Jack Mislinski</a>
+            <nav class="site-nav" aria-label="Primary">
+                <a href="/resume">Resume</a>
+                <a href="/aevox-architecture">Engineering</a>
+                <a href="https://jackmislinski.substack.com/">Writing</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <article class="doc">
+            <div class="container">
+                <div class="doc-inner">
+                    <p class="doc-eyebrow">Engineering notes · October 2026 · engine v26</p>
+                    <h1>How Aevox reads a metabolic test</h1>
+                    <p class="lede">Turning messy device exports into numbers a coach can act on. Deterministic code does the math, a model proposes, and physics checks and a physiologist decide.</p>
+                    <div class="doc-links">
+                        <span>Jack Mislinski</span>
+                        <a href="https://aevox.health">aevox.health</a>
+                        <a href="/resume">Resume</a>
+                    </div>
+
+                    <h2>The problem</h2>
+                    <p>A cardiopulmonary exercise test (CPET) is a ramp to exhaustion with breath-by-breath gas analysis. From one table of breaths, a lab wants VO₂max, the two ventilatory thresholds that set training zones, how the athlete burns fat and carbohydrate, and a retest plan. Aevox reads the file the lab&rsquo;s metabolic cart exports and turns it into that report.</p>
+                    <p>The files are hostile. The table sits somewhere different for every vendor. Three columns can all be called &ldquo;VO2&rdquo;. A column labelled in minutes can hold Excel day-fractions. Some analysers have no CO₂ channel at all. Classic threshold algorithms return confident nonsense on bad input: my first O₂-only file produced a high-confidence threshold from a column of zeros. So most of the code is about knowing when a number is wrong, and saying why.</p>
+                    <p>Aevox is deployed in five labs on five cart vendors and is in production at Hybl Performance Center, part of CommonSpirit Health and powered by EXOS. I built it, and I run every deployment: the first call, the lab&rsquo;s files as they actually arrive, and the fix.</p>
+
+                    <h2>The shape</h2>
+                    <figure>
+                        <svg viewBox="0 0 560 460" role="img" aria-labelledby="dia-title dia-desc" xmlns="http://www.w3.org/2000/svg">
+                            <title id="dia-title">Aevox upload pipeline</title>
+                            <desc id="dia-desc">A cart export goes through ingest, the engine, physiologist confirmation and the report. When ingest refuses a sheet, a model proposes a column map that must pass a physics gate. The model also reads the thresholds inside bounds before the physiologist confirms.</desc>
+                            <defs>
+                                <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1a1a1a"/></marker>
+                                <marker id="arr-m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/></marker>
+                            </defs>
+                            <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#1a1a1a">
+                                <!-- main column: deterministic, in the browser -->
+                                <rect x="20" y="16" width="240" height="48" rx="6" fill="#fff" stroke="#1a1a1a"/>
+                                <text x="140" y="45" text-anchor="middle" font-weight="600">Cart export, as uploaded</text>
+
+                                <rect x="20" y="96" width="240" height="48" rx="6" fill="#fff" stroke="#1a1a1a"/>
+                                <text x="140" y="116" text-anchor="middle" font-weight="600">Ingest</text>
+                                <text x="140" y="134" text-anchor="middle" font-size="12.5" fill="#6b6b6b">table · columns · time · units</text>
+
+                                <rect x="20" y="236" width="240" height="48" rx="6" fill="#fff" stroke="#1a1a1a"/>
+                                <text x="140" y="256" text-anchor="middle" font-weight="600">Engine</text>
+                                <text x="140" y="274" text-anchor="middle" font-size="12.5" fill="#6b6b6b">filters · VO₂max · ensemble</text>
+
+                                <rect x="20" y="316" width="240" height="48" rx="6" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
+                                <text x="140" y="345" text-anchor="middle" font-weight="600">Physiologist confirms</text>
+
+                                <rect x="20" y="396" width="240" height="48" rx="6" fill="#fff" stroke="#1a1a1a"/>
+                                <text x="140" y="416" text-anchor="middle" font-weight="600">Report</text>
+                                <text x="140" y="434" text-anchor="middle" font-size="12.5" fill="#6b6b6b">measured · provisional · withheld</text>
+
+                                <line x1="140" y1="64" x2="140" y2="94" stroke="#1a1a1a" marker-end="url(#arr)"/>
+                                <line x1="140" y1="144" x2="140" y2="234" stroke="#1a1a1a" marker-end="url(#arr)"/>
+                                <line x1="140" y1="284" x2="140" y2="314" stroke="#1a1a1a" marker-end="url(#arr)"/>
+                                <line x1="140" y1="364" x2="140" y2="394" stroke="#1a1a1a" marker-end="url(#arr)"/>
+
+                                <!-- model column: proposals that end at a check or a person -->
+                                <rect x="320" y="96" width="220" height="48" rx="6" fill="#fafaf7" stroke="#6b6b6b" stroke-dasharray="5 4"/>
+                                <text x="430" y="116" text-anchor="middle" font-weight="600">Model proposes</text>
+                                <text x="430" y="134" text-anchor="middle" font-size="12.5" fill="#6b6b6b">a column map</text>
+
+                                <rect x="320" y="166" width="220" height="48" rx="6" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
+                                <text x="430" y="186" text-anchor="middle" font-weight="600">Physics gate</text>
+                                <text x="430" y="204" text-anchor="middle" font-size="12.5" fill="#6b6b6b">ranges · HR · RER identity</text>
+
+                                <rect x="320" y="236" width="220" height="48" rx="6" fill="#fafaf7" stroke="#6b6b6b" stroke-dasharray="5 4"/>
+                                <text x="430" y="256" text-anchor="middle" font-weight="600">Model reads thresholds</text>
+                                <text x="430" y="274" text-anchor="middle" font-size="12.5" fill="#6b6b6b">one VO₂ value, in bounds</text>
+
+                                <line x1="260" y1="120" x2="318" y2="120" stroke="#6b6b6b" stroke-dasharray="5 4" marker-end="url(#arr-m)"/>
+                                <text x="289" y="110" text-anchor="middle" font-size="11" fill="#6b6b6b">refused</text>
+                                <line x1="430" y1="144" x2="430" y2="164" stroke="#6b6b6b" stroke-dasharray="5 4" marker-end="url(#arr-m)"/>
+                                <polyline points="320,196 228,196 228,146" fill="none" stroke="#1a1a1a" marker-end="url(#arr)"/>
+                                <text x="274" y="189" text-anchor="middle" font-size="11" fill="#6b6b6b">pass</text>
+                                <text x="430" y="229" text-anchor="middle" font-size="11" fill="#6b6b6b">fail → refusal with a reason</text>
+                                <line x1="260" y1="260" x2="318" y2="260" stroke="#6b6b6b" stroke-dasharray="5 4" marker-end="url(#arr-m)"/>
+                                <polyline points="430,284 430,340 262,340" fill="none" stroke="#6b6b6b" stroke-dasharray="5 4" marker-end="url(#arr-m)"/>
+                            </g>
+                        </svg>
+                        <figcaption>Solid lines are deterministic code running in the clinician&rsquo;s browser. Dashed lines are model calls through a thin API. Every dashed line ends at a check or a person.</figcaption>
+                    </figure>
+                    <p>The analysis engine is plain TypeScript running in the clinician&rsquo;s browser, inside a React app. A thin serverless API handles auth, storage, sharing and model calls (Vercel, Clerk, Neon Postgres). There are 900+ tests, and the engine has gone from v2 to v26 since July.</p>
+
+                    <h2>Life of an upload</h2>
+                    <ol>
+                        <li><strong>Read every file safely.</strong> Each file gets its own try/catch, so a crash becomes a &ldquo;skipped&rdquo; note instead of a blank page. A PDF renamed <code>.xlsx</code> is caught by its magic bytes.</li>
+                        <li><strong>Find the table and name the columns.</strong> The table is found by numeric density. Headers are scored onto 31 fields by name and unit together, units convert on read, and the time scale is measured from the data.</li>
+                        <li><strong>If the rules refuse, maybe ask the model.</strong> When a sheet is refused for mostly unrecognised headers, Claude gets each column&rsquo;s name, unit, five samples and summary statistics, never the file or the athlete, and proposes a map. The map applies only if the full columns pass physics checks, and AI-assigned columns are marked for verification.</li>
+                        <li><strong>Analyse.</strong> Outlier filtering, the cart&rsquo;s own smoothing filter, a 30-second VO₂max window per bout, and an ensemble of threshold detectors (five for each threshold on full-gas files, fewer when there is no CO₂ channel).</li>
+                        <li><strong>Second read.</strong> The model returns one VO₂ value per threshold. Code rejects anything outside physiological bounds and falls back to the engine with a banner.</li>
+                        <li><strong>Confirm.</strong> The physiologist sees the raw curves, every candidate, the model&rsquo;s reasoning and sliders. Nothing renders before they confirm.</li>
+                        <li><strong>Decide what each card may claim.</strong> A pure function sets each of 19 report cards to measured, provisional or withheld, with the reason on page one.</li>
+                        <li><strong>Save, share, review.</strong> The report, the original bytes and the engine version are saved together. The athlete gets a signed link. A separate model review reads the new report once, without the athlete&rsquo;s name, and never blocks it.</li>
+                    </ol>
+
+                    <h2>Ten decisions</h2>
+
+                    <div class="decision">
+                        <h3>1. Run the engine in the browser; keep the server thin.</h3>
+                        <p><span class="label">Why</span>No compute bill, one render path for the clinician, the athlete and the PDF, and a keep-local mode becomes possible.</p>
+                        <p><span class="label">Tradeoff</span>Large payloads, and the server stores what the browser computed. Integrity comes from archiving the original file and being able to re-run it.</p>
+                    </div>
+
+                    <div class="decision">
+                        <h3>2. Read files by shape and units, not vendor templates.</h3>
+                        <p>A column scores +0.6 for a name hit and +0.4 for the unit, loses 0.35 for a contradicting unit, and is accepted at 0.5. One vendor writes three different columns all headed &ldquo;VO2&rdquo;; only the units tell them apart.</p>
+                        <p><span class="label">Tradeoff</span>The weights are hand-set, and the matcher is greedy: a column that loses a collision isn&rsquo;t tried for its next-best field.</p>
+                    </div>
+
+                    <div class="decision">
+                        <h3>3. Measure the time scale; don&rsquo;t trust the label.</h3>
+                        <p>A breath lasts 60/RR seconds, so seconds per unit = mean(60/RR) ÷ mean(Δtime), snapped to 1, 60, 1440, 3600 or 86400. One major cart labels its time column in minutes but writes Excel day-fractions meant as MM:SS. Before this, that file&rsquo;s time axis came out 2.5× too long, which silently broke every rolling window, VO₂max included.</p>
+                        <p><span class="label">Tradeoff</span>It needs a breathing-rate column; without one, it falls back to number format, then label, then a flagged guess.</p>
+                    </div>
+
+                    <div class="decision">
+                        <h3>4. The model proposes; physics decides.</h3>
+                        <p>A proposed column map applies only if the values fall in human ranges, heart rate tracks VO₂ (r ≥ 0.5), and, for whichever channels are mapped, the cart&rsquo;s own identities hold: RER = VCO₂/VO₂, constant body mass, VE = RR × VT. The model&rsquo;s self-reported confidence is ignored. A mislabelled column can&rsquo;t satisfy RER = VCO₂/VO₂ over hundreds of breaths; on real files the identity closes to about 0.003, against a warning at 0.03. The worst-case mapper call costs about fifteen cents.</p>
+                        <p><span class="label">What still fools it</span>Anything proportional to the real channel. A %VO₂max column mapped as VO₂/kg tracks heart rate, and the implied body mass comes out a steady 35 kg, inside the plausible band. The fix is to check implied mass against a known mass, and to cap confidence when nothing ties VO₂ to an independent channel.</p>
+                    </div>
+
+                    <div class="decision">
+                        <h3>5. Thresholds: an ensemble, a bounded model read, then a person.</h3>
+                        <p>Each detector fails differently, so out-of-band candidates are dropped and the rest form a weighted median. The model returns one VO₂ number, never a time, heart rate or power, and code snaps it, or any slider, to a real breath.</p>
+                        <p><span class="label">Tradeoff</span>One more step per test. In Aevox Labs, the self-serve version, the engine sets the defaults and the model&rsquo;s read is a flagged second opinion; I&rsquo;m bringing that to every deployment.</p>
+                    </div>
+
+                    <div class="decision">
+                        <h3>6. Withhold what a missing input makes false; caveat what a suspect input makes uncertain.</h3>
+                        <p>A percentile of a non-maximal peak is false even with a caveat, so it&rsquo;s withheld, and the card says what input would unlock it. Rules go through one setter that can only move a card toward more doubt, and states are derived at render, never stored, so nobody can hand-set &ldquo;measured&rdquo;.</p>
+                    </div>
+
+                    <div class="decision">
+                        <h3>7. Version every number and keep the bytes.</h3>
+                        <p>Any change that moves a number bumps the engine version, which is saved with the original file. Re-derivation is read-only and flags headline values that moved more than 1%, so an engine change can&rsquo;t silently rewrite a signed report. Every bump records a before/after diff across 32 real test sessions: a sign fix in one threshold method left 26 of them unchanged and moved VT1 on the other six, so the diff shows exactly which athletes a fix touches.</p>
+                    </div>
+
+                    <div class="decision">
+                        <h3>8. The model review never blocks, and its findings become rules.</h3>
+                        <p>A coach never waits on a verdict. The review separates engine defects from data limits. On two trial labs&rsquo; files it found three missing rules (an unknown incline, no belt speed, detectors that disagree), which are now code pinned by tests.</p>
+                        <p><span class="label">Tradeoff</span>Errors are caught later, by me. In Aevox Labs only the riskiest uploads are held, and there the review can only downgrade.</p>
+                    </div>
+
+                    <div class="decision">
+                        <h3>9. Keep-local, enforced on both sides.</h3>
+                        <p>Some clinics can&rsquo;t send test data to a vendor. One switch stops every save, link, lookup and model call: browser helpers refuse and API routes answer 403, so even a cached page is refused. A test fails if any file that makes a network request hasn&rsquo;t been classified against the switch.</p>
+                    </div>
+
+                    <div class="decision">
+                        <h3>10. One codebase; a lab is configuration, never a fork.</h3>
+                        <p>An early branded fork fell 19 engine versions behind, so new labs build from one core, each with its own isolated deployment, auth and database provisioned by one script. One push upgrades all of them.</p>
+                        <p><span class="label">Tradeoff</span>A bad push also reaches all of them, which makes the deploy check the most important thing in CI.</p>
+                    </div>
+
+                    <h2>From the field</h2>
+                    <ul>
+                        <li><strong>A unit that was 60× off.</strong> One export labelled energy in kcal per hour, the mapper filed it as kcal per minute, and fat oxidation came out 60× too high. Units now convert on read, and a device energy column more than 15% off the Weir equation is dropped.</li>
+                        <li><strong>A new cart, same day.</strong> A lab&rsquo;s ParvoMedics export was refused because its gas-state row (STPD/BTPS) was read as the column names. Once read, heart rate typed only at stage ends would have dropped 87 of 96 rows. The fix shipped as an engine bump with a regression test the day the file arrived.</li>
+                        <li><strong>A product card from a drawing.</strong> A lab sketched the lactate comparison they did by hand; it became a report card the same week.</li>
+                        <li><strong>A deploy that lied.</strong> I hit the hosting plan&rsquo;s function cap, and production kept serving a three-week-old build while two merged commits failed to deploy. My probe passed because the old build still answered 200. I folded handlers behind one router per group, URLs unchanged. The lesson: a deploy check compares the serving commit, not the status code.</li>
+                    </ul>
+
+                    <h2>How I build with agents</h2>
+                    <p>Much of the code is written by Claude Code agents, and the commits say so. Aevox Labs, the self-serve multi-tenant version, was built by ten parallel agent lanes working from a written plan; I owned the plan, the physiology review and the QA rounds. Its upload agent reads unknown files through 13 fixed engine operations, and a confirmed recipe becomes that lab&rsquo;s adapter. What keeps it honest is the same machinery as the engine: cross-fixture diffs on every bump, a harness of synthetic bad reports, and a person who can read the test. The company runs the same way: scheduled agents draft and watch, and nothing reaches a customer without my sign-off.</p>
+
+                    <h2>What I&rsquo;d do next</h2>
+                    <ul>
+                        <li><strong>Threshold ground truth.</strong> Confirmation is mandatory because there is no labelled reference. Pre-filled sliders anchor the clinician, so only moved values are usable labels. The next step is a blinded, hand-labelled set; one detector lands in band on only 7 of 26 files, so its double weight goes when labels arrive.</li>
+                        <li><strong>A mapper eval for free.</strong> Scramble the headers on files the rules already read, then score accuracy, false accepts and false declines, and gate every model upgrade on it.</li>
+                        <li><strong>The upload flow as a state machine.</strong> One component holds the pipeline, and its step order caused three bugs. A step reducer with tested transitions replaces it.</li>
+                        <li><strong>Append-only reports.</strong> Every save becomes a new version, and any edit clears sign-off.</li>
+                        <li><strong>Count every fallback.</strong> Each deterministic floor should increment a counter and alert, so a silent fallback can&rsquo;t hide a broken model call.</li>
+                    </ul>
+
+                    <h2>On a new team with a problem like this</h2>
+                    <p>I&rsquo;d get ten real files and the customer&rsquo;s own printouts and build the ground-truth comparison before any features. Then find the identities that let the data check itself, ship refusals with reasons before guesses, and version every number from day one.</p>
+                    <p class="muted">Questions or a file your software can&rsquo;t read: <a href="mailto:jackmis610@gmail.com">jackmis610@gmail.com</a>.</p>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="social-links" aria-label="Social media">
+                <a href="https://www.linkedin.com/in/jackmislinski" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="https://github.com/jackmis610" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://x.com/JackMislinski" target="_blank" rel="noopener">X</a>
+            </div>
+            <p class="copyright">&copy; 2026 Jack Mislinski</p>
+        </div>
+    </footer>
+</body>
+</html>

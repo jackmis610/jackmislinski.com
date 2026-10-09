@@ -1,0 +1,22 @@
+# Jack Mislinski
+
+> Software engineer and founder of Aevox, AI analytics for metabolic testing deployed in five labs. Builds AI software end to end and works forward-deployed: runs every deployment, from the first sales call to the lab's raw exports to the fix that ships the same week. Exercise physiologist (MSc Applied Physiology, UCCS, 2025–2027), B.A. Computer Science, NYU; three years building analytics and trading credit at Barclays (2022–2025). Based in Brooklyn, NY.
+
+## Start here
+
+- [Resume (HTML)](https://jackmislinski.com/resume): full resume as a web page
+- [Resume (PDF)](https://jackmislinski.com/resume.pdf): one-page PDF
+- [How Aevox reads a metabolic test](https://jackmislinski.com/aevox-architecture): architecture notes — ingest under physics checks, a deterministic threshold engine, a bounded model read, a physiologist who confirms
+
+## Work
+
+- [Aevox](https://aevox.health): CPET (metabolic test) analysis platform; in production at Hybl Performance Center (CommonSpirit Health, powered by EXOS); source is private
+- [Parsel](https://parsel.health): voice digital biomarker for Parkinson's; winning entry, Healthcare × AI NYC Hackathon 2026
+- [MoTrPAC redox pipeline](https://github.com/jackmis610/motrpac-redox): multi-omics analysis (R and Python) behind a manuscript in preparation
+
+## Profiles
+
+- [GitHub](https://github.com/jackmis610)
+- [LinkedIn](https://www.linkedin.com/in/jackmislinski)
+- [X](https://x.com/JackMislinski)
+- [UCCS News feature, Sept 2026](https://news.uccs.edu/2026/09/01/uccs-student-jack-mislinski-takes-applied-physiology-into-the-future-of-health-tech/)

@@ -6,7 +6,12 @@ Static personal site. Pure HTML/CSS — no build step, no framework, no JS depen
 
 ```
 jackmislinski.com/
-├── index.html         # The site — bio, building, research, writing CTA
+├── index.html         # The site — bio, building, experience, research, writing CTA; Person JSON-LD
+├── resume.html        # HTML resume at /resume (mirrors resume.pdf; ProfilePage JSON-LD)
+├── resume.pdf         # One-page PDF resume (rendered from the HTML source in ~/Downloads)
+├── aevox-architecture.html  # Engineering notes: how Aevox reads a metabolic test
+├── llms.txt, sitemap.xml, robots.txt  # For crawlers and agents
+├── r/                 # Unlisted resume variants (not linked, not in the sitemap)
 ├── work.html          # Redirect stub → / (old page, kept so bookmarks don't 404)
 ├── funspan.html       # The Funspan framework (off-nav, linked from bio)
 ├── styles.css         # All styles
@@ -17,7 +22,9 @@ jackmislinski.com/
 └── wearables/         # Wearable Validity Atlas (standalone HTML, synced from its repo)
 ```
 
-Nav: **Writing** only (goes straight to Substack). Footer: LinkedIn · X · Substack.
+Nav: **Resume** · **Engineering** · **Writing** (Writing goes straight to Substack). Footer: LinkedIn · GitHub · X · Substack.
+
+When the resume changes, update resume.pdf, resume.html, the JSON-LD in index.html and llms.txt together, so every surface says the same thing.
 
 ## Hosting
 

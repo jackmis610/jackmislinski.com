@@ -3,16 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jack Mislinski</title>
-    <meta name="description" content="Physiologist and AI engineer. Researching bioinformatics/omics and physiology tech, building tools at the intersection of physiology and machine learning.">
+    <title>Jack Mislinski — Software engineer, founder of Aevox</title>
+    <meta name="description" content="Software engineer and founder of Aevox, AI analytics for metabolic testing deployed in five labs. Forward-deployed builder, exercise physiologist, NYU CS, ex-Barclays.">
+    <link rel="canonical" href="https://jackmislinski.com/">
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="Jack Mislinski — Software engineer, founder of Aevox">
+    <meta property="og:description" content="Builds AI software end to end and runs every deployment himself. Aevox: AI analytics for metabolic testing, deployed in five labs.">
+    <meta property="og:url" content="https://jackmislinski.com/">
+    <meta property="og:image" content="https://jackmislinski.com/images/profile.jpg">
+    <meta name="twitter:card" content="summary">
     <link rel="icon" type="image/jpeg" href="images/profile.jpg">
     <link rel="stylesheet" href="styles.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://jackmislinski.com/#person",
+      "name": "Jack Mislinski",
+      "url": "https://jackmislinski.com/",
+      "image": "https://jackmislinski.com/images/profile.jpg",
+      "jobTitle": "Software engineer; Founder, Aevox",
+      "description": "Software engineer who builds AI software end to end and works forward-deployed to run it with the customer. Founder of Aevox, AI analytics for metabolic testing deployed in five labs. Exercise physiologist (MSc Applied Physiology, UCCS), NYU Computer Science, three years building analytics and trading credit at Barclays.",
+      "worksFor": { "@type": "Organization", "name": "Aevox", "url": "https://aevox.health" },
+      "address": { "@type": "PostalAddress", "addressLocality": "Brooklyn", "addressRegion": "NY", "addressCountry": "US" },
+      "alumniOf": [
+        { "@type": "CollegeOrUniversity", "name": "New York University" },
+        { "@type": "CollegeOrUniversity", "name": "United States Military Academy" },
+        { "@type": "CollegeOrUniversity", "name": "University of Colorado Colorado Springs" },
+        { "@type": "Organization", "name": "Barclays Investment Bank" }
+      ],
+      "knowsAbout": ["Forward-deployed engineering", "AI engineering", "LLM evaluation", "TypeScript", "Python", "Cardiopulmonary exercise testing", "Exercise physiology", "Health AI"],
+      "award": "Healthcare × AI NYC Hackathon 2026, winning entry (Parsel)",
+      "sameAs": [
+        "https://www.linkedin.com/in/jackmislinski",
+        "https://github.com/jackmis610",
+        "https://x.com/JackMislinski",
+        "https://jackmislinski.substack.com/"
+      ],
+      "subjectOf": {
+        "@type": "NewsArticle",
+        "headline": "UCCS student Jack Mislinski takes applied physiology into the future of health tech",
+        "url": "https://news.uccs.edu/2026/09/01/uccs-student-jack-mislinski-takes-applied-physiology-into-the-future-of-health-tech/",
+        "publisher": { "@type": "Organization", "name": "UCCS News" }
+      }
+    }
+    </script>
 </head>
 <body>
     <header class="site-header">
         <div class="container header-inner">
             <a href="/" class="site-title">Jack Mislinski</a>
             <nav class="site-nav" aria-label="Primary">
+                <a href="/resume">Resume</a>
+                <a href="/aevox-architecture">Engineering</a>
                 <a href="https://jackmislinski.substack.com/">Writing</a>
             </nav>
         </div>
@@ -24,10 +67,16 @@
                 <img src="images/profile.jpg" alt="Jack Mislinski" class="hero-photo" width="180" height="180">
                 <div>
                     <h1>Jack Mislinski</h1>
-                    <p class="tagline">Builder · Physiologist · Researcher</p>
+                    <p class="tagline">Software engineer · Founder, Aevox · Exercise physiologist</p>
                     <p class="bio">
-                        Founder of <a href="https://aevox.health">Aevox</a> — CPET interpretation software, in pilot at Hybl Performance Center. MSc Applied Physiology, UCCS, with two papers in preparation on mitochondrial redox biology and metabolic measurement. I ship open tools at the intersection of physiology and code and won the Healthcare × AI NYC Hackathon 2026 with <a href="https://parsel.health">Parsel</a>, a longitudinal voice monitor for Parkinson's. Previously credit trader on Wall Street.
+                        I build AI software end to end and work forward-deployed to run it with the customer. I founded <a href="https://aevox.health">Aevox</a>, AI analytics for metabolic testing, deployed in five labs, from a CommonSpirit Health / EXOS performance center to independent labs. I run every deployment myself: the first sales call, each lab&rsquo;s raw exports as they actually arrive, and the fix that ships the same week. As an exercise physiologist, I can read the test the software analyzes. NYU Computer Science; three years building analytics and trading credit at Barclays.
                     </p>
+                    <div class="hero-actions">
+                        <a href="/resume">Resume</a>
+                        <a href="/resume.pdf">PDF</a>
+                        <a href="/aevox-architecture">How Aevox is built</a>
+                        <a href="https://github.com/jackmis610">GitHub</a>
+                    </div>
                     <p class="hero-featured"><a href="https://news.uccs.edu/2026/09/01/uccs-student-jack-mislinski-takes-applied-physiology-into-the-future-of-health-tech/" target="_blank" rel="noopener">Featured in UCCS News, Sept 2026 →</a></p>
                 </div>
             </div>
@@ -40,7 +89,8 @@
                     <article class="card">
                         <p class="card-label">Company</p>
                         <h3 class="card-title">Aevox</h3>
-                        <p>CPET interpretation software: reinterprets raw breath-by-breath data into a defensible clinical report — thresholds, substrate use, glycogen modeling, economy. In pilot at Hybl Performance Center. Building toward a personalized metabolic health record that blends CPET with lab, imaging, and wearable data into one continuous longitudinal picture — for longevity and performance.</p>
+                        <p>AI analytics for metabolic testing. It reads each lab&rsquo;s raw cart export; when the rules can&rsquo;t, a model proposes a column map that must pass physics checks on the data. A deterministic engine finds the thresholds, and nothing reaches the athlete until a physiologist confirms. Deployed in five labs; in production at Hybl Performance Center.</p>
+                        <a href="/aevox-architecture">How it&rsquo;s built →</a>
                         <a href="https://aevox.health">aevox.health →</a>
                     </article>
                     <article class="card">
@@ -53,6 +103,7 @@
                         <div class="card-item">
                             <h3 class="card-item-title">bioML</h3>
                             <p>Predicting metabolic substrate use from consumer wearable signals. Physiology-grounded ML.</p>
+                            <a href="https://github.com/jackmis610/bioML">GitHub →</a>
                         </div>
                     </article>
                     <article class="card">
@@ -67,6 +118,24 @@
                             <p>135 biomarkers, 519 evidence cells linking labs to mortality, CVD, dementia, frailty. Citation-backed, open source.</p>
                             <a href="/biomarkers/">Open tool →</a>
                         </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <p class="section-label">Experience and Education</p>
+                <div class="item-list">
+                    <article class="item">
+                        <p class="item-meta">2022 – 2025 · New York</p>
+                        <h3 class="item-title">Barclays Investment Bank — Associate, Investment Grade Credit Trading</h3>
+                        <p class="item-desc">Built and owned the desk&rsquo;s analytics stack (Python, SQL, kdb/q) for PnL attribution, volumes, market share and risk. Made markets and managed risk on a $1B book of front-end IG corporate bonds, with real-time coverage of 20+ buy-side accounts. Tradeweb 2023 Top 5 Performer.</p>
+                    </article>
+                    <article class="item">
+                        <p class="item-meta">2018 – 2027</p>
+                        <h3 class="item-title">NYU Computer Science · West Point · MSc Applied Physiology, UCCS</h3>
+                        <p class="item-desc">B.A. Computer Science, New York University (2022), after two years as a CS major at the United States Military Academy (Dean&rsquo;s List every semester, Cadet First Sergeant). M.S. Applied Physiology, University of Colorado Colorado Springs (2025 – 2027, GPA 4.0): mitochondrial bioenergetics and metabolic-cart validation.</p>
                     </article>
                 </div>
             </div>
@@ -105,7 +174,8 @@
         <section class="writing-cta">
             <div class="container">
                 <h2>Writing</h2>
-                <p>I write about physiology, tech, and psychology. Funspan Five — my weekly newsletter — is free. Shorter thinking on X.</p>
+                <p>Engineering notes live here, starting with how Aevox reads a metabolic test. I also write about physiology and building on Substack, with shorter thinking on X.</p>
+                <a href="/aevox-architecture" class="cta-link">Engineering notes →</a>
                 <a href="https://jackmislinski.substack.com/" class="cta-link">Substack →</a>
                 <a href="https://x.com/JackMislinski" class="cta-link">X →</a>
             </div>
@@ -117,6 +187,9 @@
             <div class="social-links" aria-label="Social media">
                 <a href="https://www.linkedin.com/in/jackmislinski" aria-label="LinkedIn" target="_blank" rel="noopener">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </a>
+                <a href="https://github.com/jackmis610" aria-label="GitHub" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
                 </a>
                 <a href="https://x.com/JackMislinski" aria-label="X (Twitter)" target="_blank" rel="noopener">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>

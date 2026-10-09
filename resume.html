@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jack Mislinski — Resume</title>
+    <meta name="description" content="Resume of Jack Mislinski: software engineer and founder of Aevox, AI analytics for metabolic testing deployed in five labs. Forward-deployed builder, exercise physiologist, NYU CS, ex-Barclays.">
+    <link rel="canonical" href="https://jackmislinski.com/resume">
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="Jack Mislinski — Resume">
+    <meta property="og:description" content="Software engineer and founder of Aevox, AI analytics for metabolic testing deployed in five labs.">
+    <meta property="og:url" content="https://jackmislinski.com/resume">
+    <meta property="og:image" content="https://jackmislinski.com/images/profile.jpg">
+    <link rel="icon" type="image/jpeg" href="images/profile.jpg">
+    <link rel="stylesheet" href="styles.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      "url": "https://jackmislinski.com/resume",
+      "dateModified": "2026-10-09",
+      "mainEntity": {
+        "@type": "Person",
+        "@id": "https://jackmislinski.com/#person",
+        "name": "Jack Mislinski",
+        "url": "https://jackmislinski.com/",
+        "email": "mailto:jackmis610@gmail.com",
+        "jobTitle": "Software engineer; Founder, Aevox",
+        "worksFor": { "@type": "Organization", "name": "Aevox", "url": "https://aevox.health" },
+        "address": { "@type": "PostalAddress", "addressLocality": "Brooklyn", "addressRegion": "NY", "addressCountry": "US" },
+        "alumniOf": [
+          { "@type": "CollegeOrUniversity", "name": "New York University" },
+          { "@type": "CollegeOrUniversity", "name": "United States Military Academy" },
+          { "@type": "CollegeOrUniversity", "name": "University of Colorado Colorado Springs" },
+          { "@type": "Organization", "name": "Barclays Investment Bank" }
+        ],
+        "hasOccupation": [
+          { "@type": "Occupation", "name": "Founder and engineer, Aevox", "description": "Builds and deploys AI analytics for metabolic testing; runs every lab deployment." },
+          { "@type": "Occupation", "name": "Associate, Investment Grade Credit Trading, Barclays Investment Bank", "description": "Built and owned the desk analytics stack; market-maker on a $1B book of front-end IG corporate bonds (2022 – 2025)." }
+        ],
+        "knowsAbout": ["Forward-deployed engineering", "AI engineering", "LLM evaluation", "TypeScript", "React", "Python", "SQL", "R", "kdb/q", "Cardiopulmonary exercise testing", "Exercise physiology"],
+        "sameAs": [
+          "https://www.linkedin.com/in/jackmislinski",
+          "https://github.com/jackmis610",
+          "https://x.com/JackMislinski",
+          "https://jackmislinski.substack.com/"
+        ]
+      }
+    }
+    </script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="site-title">Jack Mislinski</a>
+            <nav class="site-nav" aria-label="Primary">
+                <a href="/resume">Resume</a>
+                <a href="/aevox-architecture">Engineering</a>
+                <a href="https://jackmislinski.substack.com/">Writing</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <article class="doc">
+            <div class="container">
+                <div class="doc-inner">
+                    <p class="doc-eyebrow">Resume · October 2026</p>
+                    <h1>Jack Mislinski</h1>
+                    <p class="lede">Software engineer · Founder, Aevox: AI analytics deployed in 5 labs · NYU CS · MSc Applied Physiology · ex-Barclays</p>
+                    <div class="doc-links">
+                        <span>Brooklyn, NY</span>
+                        <a href="mailto:jackmis610@gmail.com">jackmis610@gmail.com</a>
+                        <a href="https://www.linkedin.com/in/jackmislinski">LinkedIn</a>
+                        <a href="https://github.com/jackmis610">GitHub</a>
+                        <a href="/resume.pdf">PDF version</a>
+                    </div>
+
+                    <h2>Summary</h2>
+                    <p>Engineer who builds and ships AI software end to end, and works forward-deployed to run it with the customer. I built Aevox, a metabolic-testing analysis platform, and run every deployment myself: the first sales call, ingesting each lab&rsquo;s raw exports as they actually arrive, shipping fixes the same week, and folding them back into one core. Five labs live on five cart vendors, from a CommonSpirit Health / EXOS performance center to independent labs. My edge: as an exercise physiologist, I can read the test the software analyzes. NYU Computer Science; three years building analytics and trading credit at Barclays.</p>
+
+                    <h2>Experience</h2>
+                    <h3>Aevox — Founder &amp; engineer <span class="when">· 2024 – present</span></h3>
+                    <ul>
+                        <li><strong>Architecture.</strong> React/TypeScript app with the analysis engine running in the browser and a thin serverless API for auth, storage, sharing and model calls (Vercel, Clerk, Neon Postgres). 900+ tests; the engine went from v2 to v26 since July, and saved reports are stamped with the engine version that produced them. <a href="/aevox-architecture">How it&rsquo;s built</a>.</li>
+                        <li><strong>Ingest with AI under guardrails.</strong> Reads a lab&rsquo;s export as uploaded: unit-aware mapping onto 31 fields and a time scale measured from the data, not trusted from labels. When the rules refuse a sheet, Claude proposes a column map that is accepted only if the full columns pass physics checks: human ranges, time that advances, heart rate that tracks VO₂, and the cart&rsquo;s own identities (RER = VCO₂/VO₂, constant body mass, VE = RR × VT). Reads COSMED, MGC, PNOE, VO2 Master, KORR and ParvoMedics exports.</li>
+                        <li><strong>Deterministic engine, model as reviewer.</strong> Ventilatory thresholds come from an ensemble of detectors; the model&rsquo;s read is bounded, and nothing renders until a physiologist confirms. Each of 19 report cards is measured, provisional or withheld, with the reason on page one.</li>
+                        <li><strong>Evals and regression.</strong> An LLM reviewer reads each new report, and recurring findings become engine rules. Each engine bump records a before/after diff across 32 real test sessions.</li>
+                        <li><strong>Deployment.</strong> One isolated, branded instance per lab (own project, auth and database), provisioned by one script, plus a keep-local mode that keeps clinical data in the browser. Trial users&rsquo; asks ship in hours: a lab&rsquo;s hand-drawn lactate comparison became a product card the same week; a cart export the engine had never read was supported the day the lab sent it.</li>
+                        <li><strong>Go-to-market and operations.</strong> Outbound to labs (100+ cold emails, 22% reply rate), discovery, pricing and contracts. I run the company on scheduled Claude agents I built behind one ops API; agents draft and watch, and nothing reaches a customer without my sign-off.</li>
+                    </ul>
+
+                    <h3>Barclays Investment Bank — Associate, Investment Grade Credit Trading <span class="when">· New York · 2022 – 2025</span></h3>
+                    <ul>
+                        <li>Built and owned the desk&rsquo;s analytics stack (Python, SQL, kdb/q) for PnL attribution, volumes, market share and risk. Market-made and managed risk on a $1B book of front-end IG corporate bonds with real-time coverage of 20+ buy-side accounts. Tradeweb 2023 Top 5 Performer.</li>
+                    </ul>
+
+                    <h2>Projects and Research</h2>
+                    <h3>Parsel — Healthcare × AI hackathon, winning entry <span class="when">· 2026</span></h3>
+                    <p>A voice digital biomarker for Parkinson&rsquo;s: a self-referenced baseline and drift, never a diagnosis. Built the clinician dashboard and patient app (React, TypeScript, ElevenLabs voice) on a FastAPI + Baseten backend. Live at <a href="https://parsel.health">parsel.health</a>.</p>
+
+                    <h3>Mitochondrial oxidative capacity outpaces redox buffering — manuscript in preparation <span class="when">· 2026</span></h3>
+                    <p>Multi-omics analysis of the MoTrPAC endurance-training dataset in R and Python: 85 redox genes, 42,770 observations across 19 tissues, 5 omic layers and 4 time points. Pipeline public at <a href="https://github.com/jackmis610/motrpac-redox">github.com/jackmis610/motrpac-redox</a>.</p>
+
+                    <h3>bioML — metabolic prediction from wearable signals <span class="when">· 2025</span></h3>
+                    <p>Synthetic-data generator plus a multitask LightGBM model predicting VO₂, RER and substrate oxidation from PPG heart rate, power and CGM. On a synthetic cohort (subject-wise 5-fold CV, n=100): RER MAE 0.034, LT2 AUC 0.953. <a href="https://github.com/jackmis610/bioML">Code</a>.</p>
+
+                    <h2>Technical Skills</h2>
+                    <ul>
+                        <li><strong>Languages:</strong> Python, TypeScript, SQL, R, kdb/q.</li>
+                        <li><strong>AI / LLM:</strong> Claude API, tool use, structured outputs, prompt caching, physics-checked model proposals, LLM review and evals, agent orchestration with Claude Code and scheduled agents.</li>
+                        <li><strong>Systems:</strong> React, Vite, Vercel serverless, Clerk, Postgres (Neon), Cloudflare Workers, WebSockets, vitest, GitHub Actions.</li>
+                        <li><strong>ML / data:</strong> pandas, scikit-learn, LightGBM, PyTorch; time-series models on noisy biosignals, grouped cross-validation.</li>
+                        <li><strong>Physiology:</strong> CPET, ventilatory and lactate thresholds, substrate oxidation, instrument validation.</li>
+                    </ul>
+
+                    <h2>Education and Additional</h2>
+                    <ul>
+                        <li><strong>M.S. Applied Physiology</strong>, University of Colorado Colorado Springs · GPA 4.0 · 2025 – 2027. Mitochondrial bioenergetics and metabolic-cart validation (6.5% VO₂ bias vs. reference); two manuscripts in preparation.</li>
+                        <li><strong>B.A. Computer Science</strong>, New York University · 2020 – 2022.</li>
+                        <li><strong>United States Military Academy, West Point</strong>, CS major · 2018 – 2020: Dean&rsquo;s List every semester, Cadet First Sergeant (top 2 of ~1,100).</li>
+                        <li>Ultramarathoner (Tahoe Rim Trail 100, Run Rabbit Run 50) and Pacific Crest Trail thru-hiker (2,650 mi). Spanish and Portuguese.</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="social-links" aria-label="Social media">
+                <a href="https://www.linkedin.com/in/jackmislinski" aria-label="LinkedIn" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="https://github.com/jackmis610" aria-label="GitHub" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://x.com/JackMislinski" aria-label="X (Twitter)" target="_blank" rel="noopener">X</a>
+            </div>
+            <p class="copyright">&copy; 2026 Jack Mislinski</p>
+        </div>
+    </footer>
+</body>
+</html>
